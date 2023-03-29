@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func isPalindrome(x int) bool {
 
 	rev := 0
@@ -16,6 +14,6 @@ func isPalindrome(x int) bool {
 
 }
 
-func main() {
-	fmt.Println(isPalindrome(1234321))
-}
+//func main() {
+//	fmt.Println(isPalindrome(1234321))
+//}
