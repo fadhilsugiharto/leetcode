@@ -14,15 +14,27 @@ func getAverages(nums []int, k int) []int {
 		return nums
 	}
 
+	if k == 0 {
+		return nums
+	}
+
 	res := make([]int, lenNums)
 	copy(res, nums)
 
+	total, lp, rp := 0, 0, 0
 	for i := k; i < lenNums-k; i++ {
-		total := 0
-		for j := i - k; j < i+k+1; j++ {
-			total += nums[j]
+		if i != k {
+			total = total - lp
+			lp = nums[i-k]
+			rp = nums[i+k]
+			total = total + rp
+		} else {
+			for j := i - k; j < i+k+1; j++ {
+				total += nums[j]
+			}
+			lp = nums[i-k]
+			rp = nums[i+k]
 		}
-
 		res[i] = total / ArrRange
 	}
 
@@ -36,7 +48,7 @@ func getAverages(nums []int, k int) []int {
 }
 
 func main() {
-	nums := []int{8}
-	k := 100000
+	nums := []int{40527, 53696, 10730, 66491, 62141, 83909, 78635, 18560}
+	k := 2
 	fmt.Println(getAverages(nums, k))
 }
