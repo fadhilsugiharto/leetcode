@@ -5,37 +5,42 @@ import (
 )
 
 func longestConsecutive(nums []int) int {
-	dict := map[int]bool{}
-	lenNums := len(nums)
-
-	if lenNums == 0 {
-		return 0
+	// Construct a set out of the nums array.
+	numsSet := make(map[int]struct{})
+	for _, n := range nums {
+		numsSet[n] = struct{}{}
 	}
 
-	for _, num := range nums {
-		dict[num] = true
-	}
+	// The answer is stored here.
+	maxSequenceLen := 0
 
-	sum := 1
-
-	for _, num := range nums {
-		length := 1
-		if _, ok := dict[num-1]; !ok {
+	// Iterate through the set.
+	for n := range numsSet {
+		// We check if n-1 is in the set. If it is, then n is not the beginning of a sequence
+		// and, we go to the next number immediately.
+		if _, ok := numsSet[n-1]; !ok {
+			// Otherwise, we increment n in a loop to see if the next consecutive value is stored in nums.
+			seqLen := 1
 			for {
-				if _, y := dict[num+1]; y {
-					length++
-					if length > sum {
-						sum = length
-					}
-					num++
-				} else {
-					break
+				if _, ok = numsSet[n+seqLen]; ok {
+					seqLen++
+					continue
 				}
+				// When the sequence is over, see if we did better than before.
+				maxSequenceLen = max(seqLen, maxSequenceLen)
+				break
 			}
 		}
 	}
 
-	return sum
+	return maxSequenceLen
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 func main() {
