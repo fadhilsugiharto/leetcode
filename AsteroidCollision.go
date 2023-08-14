@@ -94,6 +94,40 @@ func asteroidCollision(asteroids []int) []int {
 	return remnants
 }
 
+func AsteroidCollisions(asteroids []int) []int {
+	remnants := []int{}
+
+	for _, asteroid := range asteroids {
+		collide := false
+		n := len(remnants)
+		incoming := asteroid * -1
+		if n > 0 && remnants[n-1] > 0 && asteroid < 0 && remnants[n-1] <= incoming {
+			for n > 0 {
+				if remnants[n-1] < 0 {
+					remnants = append(remnants, asteroid)
+					collide = true
+					break
+				} else if remnants[n-1] == incoming {
+					remnants = remnants[:len(remnants)-1]
+					collide = true
+					break
+				} else if remnants[n-1] < incoming {
+					remnants = remnants[:len(remnants)-1]
+				} else {
+					collide = true
+					break
+				}
+				n--
+			}
+		}
+
+		if collide == false && (len(remnants) == 0 || asteroid > 0 || remnants[len(remnants)-1] < 0) {
+			remnants = append(remnants, asteroid)
+		}
+	}
+	return remnants
+}
+
 func main() {
 	fmt.Println(asteroidCollision([]int{5, 10, -5}))
 	fmt.Println(asteroidCollision([]int{8, -8}))
