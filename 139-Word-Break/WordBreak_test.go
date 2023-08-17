@@ -14,7 +14,12 @@ import (
 //go test -v
 //
 //specific:
-//go test -v -run TestNamaFunction
+//go test -v -run=TestNamaFunction
+
+// To run benchmark:
+// go test -v -bench=.
+// To run only benchmark
+// go test -v -run=NonExistantFunc -bench=.
 
 func TestMain(m *testing.M) {
 	// performs operation before the test
@@ -24,6 +29,33 @@ func TestMain(m *testing.M) {
 
 	// performs operation after the test
 	fmt.Println("Test finished")
+}
+
+func BenchmarkWordBreakTable(b *testing.B) {
+	benchmarks := []struct {
+		name          string
+		requestString string
+		requestDict   []string
+	}{
+		{
+			name:          "true-test",
+			requestString: "cars",
+			requestDict:   []string{"car", "ca", "rs"},
+		},
+		{
+			name:          "false-test",
+			requestString: "carss",
+			requestDict:   []string{"car", "ca", "rs"},
+		},
+	}
+
+	for _, benchmark := range benchmarks {
+		b.Run(benchmark.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				wordBreak(benchmark.requestString, benchmark.requestDict)
+			}
+		})
+	}
 }
 
 func TestWordBreakTable(t *testing.T) {
